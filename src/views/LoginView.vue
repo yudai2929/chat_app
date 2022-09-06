@@ -21,31 +21,18 @@ const loginWithGoogle = async () => {
 </script>
 
 <template>
-  <div :class="$style.container">
-    <el-row justify="center">
-      <el-card shadow="never" style="width: 400px">
-        <template #header>
-          <div>
-            <h1 style="font-size: large; text-align: center">ログイン</h1>
-          </div>
-        </template>
-        <el-form label-width="8rem">
-          <el-row justify="center">
-            <el-button @click="loginWithGoogle">
-              <google-icon style="height: 24px; width: 24px" />
-              <span style="margin-left: 12px"
-                >Googleアカウントでサインイン</span
-              >
-            </el-button>
-          </el-row>
-        </el-form>
-      </el-card>
-    </el-row>
-  </div>
+  <el-row justify="center" style="margin-top: 20vh">
+    <el-card shadow="never" style="width: 400px; height: 400px">
+      <div>
+        <h1 style="font-size: large; text-align: center">ログイン</h1>
+      </div>
+      <el-divider />
+      <el-row justify="center" style="align-items: center; height: 250px">
+        <el-button @click="loginWithGoogle">
+          <google-icon style="height: 24px; width: 24px" />
+          <span style="margin-left: 12px">Googleアカウントでサインイン</span>
+        </el-button>
+      </el-row>
+    </el-card>
+  </el-row>
 </template>
-
-<style module lang="scss">
-.container {
-  margin-top: 25vh;
-}
-</style>
