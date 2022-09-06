@@ -1,18 +1,15 @@
 <template>
   <ElRow justify="center">
-    <ElCol :span="6">
-      <table>
-        <label for="free word">ワード検索</label>
-        <ElInput v-model="text" type="text" />
-        <el-button type="primary" :icon="Search" @click="onSearch"
-          >検索</el-button
-        >
-        <el-button type="info"
-          ><router-link :to="{ name: 'search' }"
-            >絞り込み</router-link
-          ></el-button
-        >
-      </table>
+    <ElCol :span="30">
+      <div style="text-aligin: center">テスト</div>
+      <label for="free word">フリーワード検索</label>
+      <ElInput v-model="text" type="text" />
+      <el-button type="primary" :icon="Search" @click="onSearch"
+        >検索</el-button
+      >
+      <el-button type="info"
+        ><router-link :to="{ name: 'search' }">絞り込み</router-link></el-button
+      >
       <div v-if="queryResult">
         <BukkenPropertyCard
           v-for="res in queryResult.results"
