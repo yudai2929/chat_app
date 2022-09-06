@@ -1,0 +1,46 @@
+<script lang="ts" setup>
+import { getAuth, signOut } from 'firebase/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const signOutWithGoogle = () => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      router.push({ path: '/login' });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+</script>
+
+<template>
+  <el-header style="padding: 0; position: fixed; width: 100%; z-index: 100">
+    <el-menu
+      default-active="home"
+      class="el-menu-demo"
+      mode="horizontal"
+      background-color="#9BCDFF"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+      :ellipsis="false"
+      router
+    >
+      <el-menu-item index="0"
+        >2022サマーインターンボイラープレート</el-menu-item
+      >
+      <div class="flex-grow"></div>
+      <el-menu-item index="home">Home</el-menu-item>
+      <el-menu-item index="about">About</el-menu-item>
+      <el-menu-item index="login">Login</el-menu-item>
+      <el-button @click="signOutWithGoogle">sign out</el-button>
+    </el-menu>
+  </el-header>
+</template>
+
+<style scoped>
+.flex-grow {
+  flex-grow: 1;
+}
+</style>
