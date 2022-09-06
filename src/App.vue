@@ -1,3 +1,20 @@
+<script lang="ts" setup>
+import { getAuth, signOut } from 'firebase/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const signOutWithGoogle = () => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      router.push({ path: '/login' });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+</script>
+
 <template>
   <div>
     <el-menu
@@ -17,6 +34,7 @@
       <el-menu-item index="home">Home</el-menu-item>
       <el-menu-item index="about">About</el-menu-item>
       <el-menu-item index="login">Login</el-menu-item>
+      <el-button @click="signOutWithGoogle">sign out</el-button>
     </el-menu>
     <RouterView />
   </div>
