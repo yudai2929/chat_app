@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'vue-router';
+import GoogleIcon from '@/icons/googleIcon.vue';
 
 const router = useRouter();
 
@@ -30,9 +31,12 @@ const loginWithGoogle = async () => {
         </template>
         <el-form label-width="8rem">
           <el-row justify="center">
-            <el-button type="primary" @click="loginWithGoogle"
-              >Googleアカウントでサインイン</el-button
-            >
+            <el-button @click="loginWithGoogle">
+              <google-icon />
+              <span style="margin-left: 12px"
+                >Googleアカウントでサインイン</span
+              >
+            </el-button>
           </el-row>
         </el-form>
       </el-card>
