@@ -1,63 +1,39 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/plugins/firebase';
-import { useRoute, useRouter } from 'vue-router';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const route = useRoute();
 
-const isLoading = ref(false);
-const loginForm = reactive({
-  email: '',
-  password: '',
-});
+const loginWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
 
-const login = async () => {
-  isLoading.value = true;
-  const userCredential = await signInWithEmailAndPassword(
-    auth,
-    loginForm.email,
-    loginForm.password
-  ).catch((e) => {
-    console.error(e);
-    isLoading.value = false;
-  });
-  if (!userCredential) return;
-
-  console.log(`Signed in at ${userCredential.user.email}`);
-  router.push((route.query.redirect as string) ?? { name: 'home' });
-  isLoading.value = false;
+  const auth = getAuth();
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(result);
+      router.push({ path: '/' });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 </script>
 
 <template>
   <div :class="$style.container">
     <el-row justify="center">
-      <el-card
-        v-loading.fullscreen.lock="isLoading"
-        shadow="never"
-        style="width: 400px"
-      >
+      <el-card shadow="never" style="width: 400px">
         <template #header>
           <div>
-            <h1 style="text-align: center">ログイン</h1>
+            <h1 style="font-size: large; text-align: center">ログイン</h1>
           </div>
         </template>
-        <el-form label-width="8rem" :model="loginForm">
-          <el-form-item label="メールアドレス" type="email">
-            <el-input v-model="loginForm.email" />
-          </el-form-item>
-          <el-form-item label="パスワード">
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              show-password
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="login">ログイン</el-button>
-          </el-form-item>
+        <el-form label-width="8rem">
+          <el-row justify="center">
+            <el-button type="primary" @click="loginWithGoogle"
+              >Googleアカウントでサインイン</el-button
+            >
+          </el-row>
         </el-form>
       </el-card>
     </el-row>
@@ -66,6 +42,6 @@ const login = async () => {
 
 <style module lang="scss">
 .container {
-  margin-top: 32px;
+  margin-top: 25vh;
 }
 </style>
