@@ -32,7 +32,7 @@ const loginWithGoogle = async () => {
         <el-form label-width="8rem">
           <el-row justify="center">
             <el-button @click="loginWithGoogle">
-              <google-icon />
+              <google-icon style="height: 24px; width: 24px" />
               <span style="margin-left: 12px"
                 >Googleアカウントでサインイン</span
               >

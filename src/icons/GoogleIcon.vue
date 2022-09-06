@@ -1,8 +1,8 @@
 <template>
   <svg
-    width="20"
-    height="20"
-    viewBox="0 0 40 40"
+    width="28"
+    height="28"
+    viewBox="0 0 48 48"
     aria-hidden="true"
     class="L5wZDc"
   >
