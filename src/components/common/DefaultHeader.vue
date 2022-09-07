@@ -60,7 +60,7 @@ const signOutWithGoogle = () => {
               >ログアウト</el-button
             >
             <el-button v-else type="primary" plain @click="onClickSignIn"
-              >サインアウト</el-button
+              >ログイン</el-button
             >
           </el-row>
         </el-row>
