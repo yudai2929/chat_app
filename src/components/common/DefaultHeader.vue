@@ -1,8 +1,15 @@
 <script lang="ts" setup>
 import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'vue-router';
+import { useUser } from '@/composables/useUser';
+
+const { user } = useUser();
 
 const router = useRouter();
+
+const onClickSignIn = () => {
+  router.push({ path: '/login' });
+};
 const signOutWithGoogle = () => {
   const auth = getAuth();
   signOut(auth)
@@ -23,18 +30,41 @@ const signOutWithGoogle = () => {
       mode="horizontal"
       background-color="#9BCDFF"
       text-color="#fff"
-      active-text-color="#ffd04b"
+      active-text-color="#fff"
       :ellipsis="false"
       router
-    >
-      <el-menu-item index="0"
-        >2022サマーインターンボイラープレート</el-menu-item
-      >
-      <div class="flex-grow"></div>
-      <el-menu-item index="home">Home</el-menu-item>
-      <el-menu-item index="about">About</el-menu-item>
-      <el-menu-item index="login">Login</el-menu-item>
-      <el-button @click="signOutWithGoogle">sign out</el-button>
+      style="padding: 0 96px"
+      ><el-row justify="space-between" style="width: 100%">
+        <el-row>
+          <el-menu-item
+            index="0"
+            style="font-weight: bold; color: #303133; font-size: 24px"
+            >サービス名</el-menu-item
+          >
+        </el-row>
+        <el-row>
+          <el-row>
+            <el-menu-item index="home" style="font-weight: bold"
+              >チャット</el-menu-item
+            >
+            <el-menu-item index="about" style="font-weight: bold"
+              >絞り込み</el-menu-item
+            >
+          </el-row>
+          <el-row justify="center" align="middle" style="margin-left: 24px">
+            <el-button
+              v-if="user"
+              type="primary"
+              plain
+              @click="signOutWithGoogle"
+              >ログアウト</el-button
+            >
+            <el-button v-else type="primary" plain @click="onClickSignIn"
+              >サインアウト</el-button
+            >
+          </el-row>
+        </el-row>
+      </el-row>
     </el-menu>
   </el-header>
 </template>
