@@ -1,6 +1,6 @@
 <template>
   <div>
-    <default-header />
+    <defaultHeader />
     <main style="padding-top: 60px; min-height: 100vh">
       <RouterView />
     </main>
