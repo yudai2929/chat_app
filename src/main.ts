@@ -30,6 +30,11 @@ const routes: RouteRecordRaw[] = [
     meta: { isPublic: true },
   },
   {
+    path: '/register',
+    component: () => import('@/views/RegisterView.vue'),
+    name: 'register',
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: { name: 'home' },
     meta: { isPublic: true },
