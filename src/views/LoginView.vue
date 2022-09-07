@@ -1,22 +1,48 @@
 <script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'vue-router';
-import GoogleIcon from '@/icons/googleIcon.vue';
+import { useUser } from '@/composables/useUser';
+import GoogleIcon from '@/icons/GoogleIcon.vue';
+import { computed, ref, watch } from 'vue';
+import { db } from '@/plugins/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const router = useRouter();
+const { user } = useUser();
+
+const profileExits = ref(false);
+
+const emailAddress = computed(() => {
+  return user.value?.email;
+});
+
+const fetchProfile = async (emailAddress: string) => {
+  const docRef = doc(db, 'profile', emailAddress);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    profileExits.value = true;
+  }
+};
+
+// databaseに値が存在する場合 -> "/"
+// databaseに値が存在しない場合 -> "/register"
+watch(emailAddress, async () => {
+  console.log('address changed');
+  if (!emailAddress.value) return;
+  await fetchProfile(emailAddress.value);
+  if (profileExits.value) {
+    router.push({ path: '/' });
+  } else {
+    router.push({ path: '/register' });
+  }
+});
 
 const loginWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
-
   const auth = getAuth();
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log(result);
-      router.push({ path: '/' });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  signInWithPopup(auth, provider).catch((error) => {
+    console.error(error);
+  });
 };
 </script>
 
@@ -29,7 +55,7 @@ const loginWithGoogle = async () => {
       <el-divider />
       <el-row justify="center" style="align-items: center; height: 250px">
         <el-button @click="loginWithGoogle">
-          <google-icon style="height: 24px; width: 24px" />
+          <GoogleIcon style="height: 24px; width: 24px" />
           <span style="margin-left: 12px">Googleアカウントでサインイン</span>
         </el-button>
       </el-row>
