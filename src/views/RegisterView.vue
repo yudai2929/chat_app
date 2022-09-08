@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormInstance } from 'element-plus';
+import { useUser } from '@/composables/useUser';
+import { Profile } from '@/types/Profile';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/plugins/firebase';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const { user } = useUser();
 
 const formValue = reactive({
   name: '',
@@ -9,19 +17,35 @@ const formValue = reactive({
   phoneNumber: '',
   content: undefined,
 });
-
 const formRef = ref<FormInstance>();
+const loading = ref(false);
 
-const submitForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.validate((valid) => {
-    if (valid) {
-      console.log(formValue);
-      console.log('submit!');
-    } else {
-      console.log('error submit!');
-      return false;
-    }
+const postProfile = async (profile: Profile) => {
+  loading.value = true;
+  await setDoc(doc(db, 'profile', profile.email), profile);
+};
+
+const onSubmitForm = (formEl: FormInstance | undefined) => {
+  const email = user.value?.email;
+  const imageUrl = user.value?.photoURL;
+
+  if (!formEl || !email || !imageUrl) return;
+
+  //フォームの値が妥当かチェック
+  formEl.validate(async (valid) => {
+    if (!valid) return;
+    const profile: Profile = { ...formValue, email, imageUrl };
+
+    await postProfile(profile)
+      .then(() => {
+        router.push({ path: '/' });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        loading.value = false;
+      });
   });
 };
 
@@ -100,7 +124,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(formRef)"
+          <el-button
+            v-loading.fullscreen.lock="loading"
+            type="primary"
+            @click="onSubmitForm(formRef)"
             >新規登録</el-button
           >
           <el-button @click="resetForm(formRef)">リセット</el-button>
