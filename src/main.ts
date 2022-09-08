@@ -5,8 +5,12 @@ import 'normalize.css';
 import { auth } from '@/plugins/firebase';
 import firebase from 'firebase/compat';
 import Unsubscribe = firebase.Unsubscribe;
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 const app = createApp(App);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component);
+}
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: { name: 'home' }, meta: { isPublic: true } },
