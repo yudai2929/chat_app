@@ -5,7 +5,7 @@
     {{ build?.buildingName }} {{ room?.dwellingUnit?.roomNumberText }}
   </div>
   <!--一押しコメント-->
-  <div>
+  <div class="comment">
     {{ room?.websiteComment }}
   </div>
   <div class="container">
@@ -19,8 +19,10 @@
       <!--家賃-->
       <div class="money">
         家賃
-        {{ room?.contractCondition.price.amount }}円 / 共益費
-        {{ room?.contractCondition.manageCost?.amount }}円
+        {{ room?.contractCondition.price.amount / 10000 }}万円 <br />
+        <div class="kyoeki">
+          共益費 {{ room?.contractCondition.manageCost?.amount }}円
+        </div>
       </div>
       <!--敷金礼金-->
       <div class="money2">
@@ -50,8 +52,33 @@
           >内見予約</ElButton
         >
       </div>
+
       <!--部屋の詳細-->
-      <div>
+      <el-descriptions
+        title="部屋の詳細情報"
+        direction="vertical"
+        :column="4"
+        border
+      >
+        <el-descriptions-item label="現状" :span="2">{{
+          room?.currentStatus
+        }}</el-descriptions-item>
+        <el-descriptions-item label="楽器演奏">{{
+          room?.contractCondition.musicalInstrumentRestriction
+        }}</el-descriptions-item>
+        <el-descriptions-item label="ガス">
+          {{ room?.gas }}</el-descriptions-item
+        >
+        <el-descriptions-item label="最寄駅">
+          {{ room?.transportation[0].station?.lineName }}
+          {{ room?.transportation[0].station?.stationName }}駅
+          {{ room?.transportation[0].wayTo }}
+          {{ room?.transportation[0].stationAccess?.value }}
+          {{ room?.transportation[0].stationAccess?.unit }}
+        </el-descriptions-item>
+      </el-descriptions>
+      その他
+      <div class="other">
         {{ room?.specialityComment }},
 
         {{ room?.equipmentComment }}
@@ -60,7 +87,6 @@
   </div>
 
   <!--{{ build }}-->
-  {{ center }}
   <!--地図(非同期処理だと値を更新しても反映されない)-->
   <!--
   <div style="height: 400px; width: 100%">
@@ -221,6 +247,7 @@ onSearch2();
 .money {
   font-size: 30px;
   font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 10px;
 }
 
 .money2 {
@@ -231,5 +258,13 @@ onSearch2();
 .naiken_button {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.other {
+  font-size: 10px;
+}
+
+.kyoeki {
+  font-size: 80%;
 }
 </style>
