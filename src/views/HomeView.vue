@@ -4,12 +4,12 @@
   <ElRow justify="center">
     <ElCol :span="30">
       <div class="free">
+        フリーワード検索
         <el-form
           ref="ruleFormRef"
           :model="ruleForm"
           :rules="rules"
           label-width="1px"
-          class="demo-ruleForm"
           status-icon
           style="400px"
         >
@@ -28,14 +28,20 @@
         </el-form>
       </div>
     </ElCol>
-    <!--ここに地図上での表示をお願いします queryResultに情報が帰ってきます-->
-    {{ queryResult }}
+    <!--物件情報-->
+    <div v-if="queryResult">
+      <BukkenPropertyCard
+        v-for="res in queryResult.results"
+        :key="res.buildingGuid"
+        :building-property-preview="res"
+      />
+    </div>
   </ElRow>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { FormInstance, FormRules, valueEquals } from 'element-plus';
+import { FormInstance, FormRules } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import BukkenPropertyCard from '@/components/BukkenPropertyCard.vue';
 import {
@@ -52,10 +58,28 @@ const ruleForm = reactive({
 });
 
 const rules = reactive<FormRules>({
-  search: [
-    { required: true, message: 'Please input activity form', trigger: 'blur' },
-  ],
+  search: [{ required: true, message: '未入力です', trigger: 'blur' }],
 });
+
+// dejimaAPIクライアントを初期化
+const rentPropertyQueryAPI = new RentPropertyQueryAPIApi(new Configuration());
+// 検索結果を受け取る変数を用意。初期値は簡単のためとりあえず`null`にしておく
+const queryResult = ref<BuildingPropertyList | null>(null);
+const onSearch = async () => {
+  // 検索ボタンが押されたらinputフォームの入力で物件を検索し、結果を`queryResult`に代入する
+  queryResult.value = await rentPropertyQueryAPI.searchRentPropertyByBuilding({
+    buildingName: ruleForm.search,
+  });
+};
+
+// 駅情報に関する取得 表示部分が未完成なので一旦建物情報のみの検索とする
+// const queryResult = ref<LineAggregateResult | null>(null);
+// const onSearch = async () => {
+//   queryResult.value = await rentPropertyQueryAPI.aggregateRentPropertyByLine({
+//     level: LineLevel.Station,
+//     buildingName: text.value,
+//   });
+// };
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -67,27 +91,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
-};
-
-const text = ref('');
-// dejimaAPIクライアントを初期化
-const rentPropertyQueryAPI = new RentPropertyQueryAPIApi(new Configuration());
-// 検索結果を受け取る変数を用意。初期値は簡単のためとりあえず`null`にしておく
-// const queryResult = ref<BuildingPropertyList | null>(null);
-// const onSearch = async () => {
-//   // 検索ボタンが押されたらinputフォームの入力で物件を検索し、結果を`queryResult`に代入する
-//   queryResult.value = await rentPropertyQueryAPI.searchRentPropertyByBuilding({
-//     buildingName: text.value,
-//   });
-//   text.value = '';
-// };
-
-const queryResult = ref<LineAggregateResult | null>(null);
-const onSearch = async () => {
-  queryResult.value = await rentPropertyQueryAPI.aggregateRentPropertyByLine({
-    level: LineLevel.Line,
-    buildingName: text.value,
-  });
 };
 </script>
 
