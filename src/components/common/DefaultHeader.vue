@@ -44,7 +44,7 @@ const signOutWithGoogle = () => {
         </el-row>
         <el-row>
           <el-row>
-            <el-menu-item index="home" style="font-weight: bold"
+            <el-menu-item index="/chat" style="font-weight: bold"
               >チャット</el-menu-item
             >
             <el-menu-item index="about" style="font-weight: bold"

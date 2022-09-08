@@ -35,6 +35,11 @@ const routes: RouteRecordRaw[] = [
     name: 'register',
   },
   {
+    path: '/chat',
+    component: () => import('@/views/ChatView.vue'),
+    name: 'chat',
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: { name: 'home' },
     meta: { isPublic: true },
