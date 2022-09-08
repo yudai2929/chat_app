@@ -2,16 +2,13 @@
   <h1 class="headline">上京したてでお金のない大学生でも大丈夫！</h1>
   <h1 class="headline">楽器の弾ける格安賃貸をご案内</h1>
   <ElRow justify="center">
-    <ElCol :span="30">
+    <ElCol :span="12">
       <div class="free">
-        フリーワード検索
         <el-form
           ref="ruleFormRef"
           :model="ruleForm"
           :rules="rules"
           label-width="1px"
-          status-icon
-          style="400px"
         >
           <el-form-item label="" prop="search">
             <el-input v-model="ruleForm.search" type="text" />
@@ -26,16 +23,16 @@
             <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
           </el-form-item>
         </el-form>
+        <div v-if="queryResult" class="panel">
+          <BukkenPropertyCard
+            v-for="res in queryResult.results"
+            :key="res.buildingGuid"
+            :building-property-preview="res"
+          />
+        </div>
       </div>
     </ElCol>
     <!--物件情報-->
-    <div v-if="queryResult">
-      <BukkenPropertyCard
-        v-for="res in queryResult.results"
-        :key="res.buildingGuid"
-        :building-property-preview="res"
-      />
-    </div>
   </ElRow>
 </template>
 
@@ -91,6 +88,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
+  queryResult.value = null;
 };
 </script>
 
@@ -103,7 +101,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 .free {
   margin: 50px 50px;
-  float: left;
   text-align: center;
+}
+
+.panel {
+  text-align: left;
 }
 </style>

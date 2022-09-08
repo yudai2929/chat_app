@@ -25,8 +25,6 @@ const publishedAt = computed(() => {
     <div>
       <p>住所：{{ buildingPropertyPreview.addressText }}</p>
       <p>構造：{{ buildingPropertyPreview.structure }}</p>
-      <p>都市：{{ buildingPropertyPreview.city }}</p>
-      <p>区画：{{ buildingPropertyPreview.town }}</p>
       <p>ポイント：{{ buildingPropertyPreview.property[0].salesPoint }}</p>
       <small class="published">{{ publishedAt }}公開</small>
     </div>
