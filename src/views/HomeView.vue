@@ -29,25 +29,21 @@
       </div>
     </ElCol>
     <!--ここに地図上での表示をお願いします queryResultに情報が帰ってきます-->
-    <div v-if="queryResult">
-      <BukkenPropertyCard
-        v-for="res in queryResult.results"
-        :key="res.buildingGuid"
-        :building-property-preview="res"
-      />
-    </div>
+    {{ queryResult }}
   </ElRow>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import type { FormInstance, FormRules } from 'element-plus';
+import { FormInstance, FormRules, valueEquals } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import BukkenPropertyCard from '@/components/BukkenPropertyCard.vue';
 import {
   BuildingPropertyList,
   Configuration,
   RentPropertyQueryAPIApi,
+  LineAggregateResult,
+  LineLevel,
 } from '@/dejima/property';
 
 const ruleFormRef = ref<FormInstance>();
@@ -77,13 +73,21 @@ const text = ref('');
 // dejimaAPIクライアントを初期化
 const rentPropertyQueryAPI = new RentPropertyQueryAPIApi(new Configuration());
 // 検索結果を受け取る変数を用意。初期値は簡単のためとりあえず`null`にしておく
-const queryResult = ref<BuildingPropertyList | null>(null);
+// const queryResult = ref<BuildingPropertyList | null>(null);
+// const onSearch = async () => {
+//   // 検索ボタンが押されたらinputフォームの入力で物件を検索し、結果を`queryResult`に代入する
+//   queryResult.value = await rentPropertyQueryAPI.searchRentPropertyByBuilding({
+//     buildingName: text.value,
+//   });
+//   text.value = '';
+// };
+
+const queryResult = ref<LineAggregateResult | null>(null);
 const onSearch = async () => {
-  // 検索ボタンが押されたらinputフォームの入力で物件を検索し、結果を`queryResult`に代入する
-  queryResult.value = await rentPropertyQueryAPI.searchRentPropertyByBuilding({
+  queryResult.value = await rentPropertyQueryAPI.aggregateRentPropertyByLine({
+    level: LineLevel.Line,
     buildingName: text.value,
   });
-  text.value = '';
 };
 </script>
 
