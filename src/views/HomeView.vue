@@ -4,25 +4,74 @@
   <ElRow justify="center">
     <ElCol :span="30">
       <div class="free">
-        フリーワードで検索
-        <ElInput v-model="text" type="text" />
-        <el-button type="primary" :icon="Search" @click="onSearch"
-          >検索</el-button
+        <el-form
+          ref="ruleFormRef"
+          :model="ruleForm"
+          :rules="rules"
+          label-width="1px"
+          class="demo-ruleForm"
+          status-icon
+          style="400px"
         >
+          <el-form-item label="" prop="search">
+            <el-input v-model="ruleForm.search" type="text" />
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              type="primary"
+              :icon="Search"
+              @click="submitForm(ruleFormRef)"
+              >検索</el-button
+            >
+            <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </ElCol>
     <!--ここに地図上での表示をお願いします queryResultに情報が帰ってきます-->
+    <div v-if="queryResult">
+      <BukkenPropertyCard
+        v-for="res in queryResult.results"
+        :key="res.buildingGuid"
+        :building-property-preview="res"
+      />
+    </div>
   </ElRow>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
+import BukkenPropertyCard from '@/components/BukkenPropertyCard.vue';
 import {
   BuildingPropertyList,
   Configuration,
   RentPropertyQueryAPIApi,
 } from '@/dejima/property';
+
+const ruleFormRef = ref<FormInstance>();
+const ruleForm = reactive({
+  search: '',
+});
+
+const rules = reactive<FormRules>({
+  search: [
+    { required: true, message: 'Please input activity form', trigger: 'blur' },
+  ],
+});
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid) => {
+    if (valid) onSearch();
+  });
+};
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
 
 const text = ref('');
 // dejimaAPIクライアントを初期化
@@ -34,6 +83,7 @@ const onSearch = async () => {
   queryResult.value = await rentPropertyQueryAPI.searchRentPropertyByBuilding({
     buildingName: text.value,
   });
+  text.value = '';
 };
 </script>
 
