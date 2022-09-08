@@ -40,7 +40,65 @@ const AVATAR_URL =
     </el-col>
     <el-col :span="18" style="background-color: red">
       <el-row style="flex-direction: column; height: 100%">
-        <div style="background-color: #f4f4f5; height: 90%">チャット</div>
+        <div style="background-color: #f4f4f5; height: 90%">
+          <el-row
+            justify="center"
+            style="padding: 8px; border-bottom: 2px solid #e6e8eb"
+            ><h2>物件名</h2></el-row
+          >
+          <div
+            style="padding-left: 48px; padding-right: 48px; padding-top: 24px"
+          >
+            <el-row style="margin-bottom: 12px">
+              <div
+                style="display: flex; align-items: center; margin-right: 12px"
+              >
+                <el-avatar :size="30" :src="AVATAR_URL" />
+              </div>
+
+              <div
+                style="display: flex; align-items: center; margin-right: 12px"
+              >
+                <p
+                  style="
+                    font-size: 12px;
+                    background-color: #9bcdff;
+                    padding: 12px;
+                    color: #fff;
+                    margin: 0;
+                    border-radius: 12px;
+                    border-bottom-left-radius: 0;
+                  "
+                >
+                  メッセージメッセージ...
+                </p>
+              </div>
+              <div style="display: flex; align-items: end">
+                <span style="font-size: 12px"> AM 9:00 </span>
+              </div>
+            </el-row>
+            <el-row style="margin-bottom: 12px" justify="end">
+              <div style="display: flex; align-items: end; margin-right: 12px">
+                <span style="font-size: 12px"> AM 9:00 </span>
+              </div>
+              <div style="display: flex; align-items: center">
+                <p
+                  style="
+                    font-size: 12px;
+                    background-color: #fff;
+                    padding: 12px;
+                    color: #303133;
+                    margin: 0;
+                    border-radius: 12px;
+                    border-bottom-right-radius: 0;
+                  "
+                >
+                  メッセージメッセージ...
+                </p>
+              </div>
+            </el-row>
+          </div>
+        </div>
         <div
           style="
             background-color: #fafafa;
@@ -49,7 +107,16 @@ const AVATAR_URL =
           "
         >
           <el-form style="margin: 32px 32px">
-            <el-input placeholder="メッセージそ入力" />
+            <el-row>
+              <el-input placeholder="メッセージを入力" style="width: 90%" />
+              <el-button
+                type="primary"
+                class="flex-center"
+                style="margin-left: 24px"
+              >
+                <el-icon :size="25"><Promotion /></el-icon>
+              </el-button>
+            </el-row>
           </el-form>
         </div>
       </el-row>
