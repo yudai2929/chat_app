@@ -17,7 +17,7 @@
             <el-button
               type="primary"
               :icon="Search"
-              @click="submitForm(ruleFormRef)"
+              @click="searchForm(ruleFormRef)"
               >検索</el-button
             >
             <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
@@ -78,7 +78,7 @@ const onSearch = async () => {
 //   });
 // };
 
-const submitForm = async (formEl: FormInstance | undefined) => {
+const searchForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid) => {
     if (valid) onSearch();

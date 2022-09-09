@@ -18,8 +18,9 @@ const publishedAt = computed(() => {
     <template #header>
       <div class="card-header">
         <span>{{
-          `${buildingPropertyPreview.buildingName} ${buildingPropertyPreview.property[0].roomNumberText}号室`
+          `${buildingPropertyPreview.buildingName} ${buildingPropertyPreview.property[0].roomNumberText}号室：`
         }}</span>
+        <router-link :to="{ name: '' }">詳細情報</router-link>
       </div>
     </template>
     <div>
