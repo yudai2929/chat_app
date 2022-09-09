@@ -50,13 +50,16 @@
       </div>
       <!--内見予約-->
       <div>
-        <ElButton size="large" type="primary" class="naiken_button"
-          >内見予約</ElButton
-        >
+        <el-button v-loading.fullscreen.lock="loading" @click="onClickApply">
+          内見を申し込む
+        </el-button>
       </div>
 
       <!--部屋の詳細-->
       <el-descriptions title="詳細情報" direction="vertical" :column="3" border>
+        <el-descriptions-item label="レイアウト">
+          {{ room?.dwellingUnit?.layoutText }}
+        </el-descriptions-item>
         <el-descriptions-item label="構造">
           {{ build?.structure }}
         </el-descriptions-item>
@@ -134,14 +137,15 @@ export default {
 
 <!--物件情報の取得-->
 <script setup lang="ts">
-import { ref, onBeforeUpdate } from 'vue';
+import { ref, computed } from 'vue';
 import {
   Configuration,
   RentProperty,
   RentPropertyQueryAPIApi,
   BuildingQueryAPIApi,
   Building,
-  BuildingPreview,
+  AgentQueryAPIApi,
+  Agent,
 } from '@/dejima/property';
 import {
   MetadataResponse,
@@ -149,15 +153,24 @@ import {
   Configuration as ImageConfiguration,
 } from '@/dejima/image';
 import { useRoute } from 'vue-router';
+import { useProfile } from '@/composables/useProfile';
+import { useUser } from '@/composables/useUser';
+import { db } from '@/plugins/firebase';
+import { Message } from '@/types/Message';
+import { RequestRoom } from '@/types/req/RequestRoom';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
 const route = useRoute();
 
 // dejimaAPIクライアントを初期化
 const rentPropertyQueryAPI = new RentPropertyQueryAPIApi(new Configuration());
 const buildingQueryAPI = new BuildingQueryAPIApi(new Configuration());
 const ImageQueryAPI = new ImageQueryAPIApi(new ImageConfiguration());
+const AgentQueryAPI = new AgentQueryAPIApi(new Configuration());
 // 検索結果を受け取る変数を用意。初期値は簡単のためとりあえず`null`にしておく
 const room = ref<RentProperty | null>(null);
 const build = ref<Building | null>(null);
+const agent = ref<Agent | null>(null);
 const id: string = route.params.id.toString();
 console.log(`パスパラメータ：${id}`);
 
@@ -179,27 +192,100 @@ const getCenter = (build: Building) => {
   center.push(lon);
   center.splice(0, 2);
 };*/
-const onSearch = async () => {
+const roomSearch = async () => {
   room.value = await rentPropertyQueryAPI.getRentProperty({
     propertyFullKey: id,
   });
   build.value = await buildingQueryAPI.getBuilding({
     buildingGuid: room.value?.buildingGuid || '',
   });
-  //await getCenter(build.value);
+  agent.value = await AgentQueryAPI.getAgentByCustomerKey({
+    agentIdentifier: room.value.customerKey,
+  });
 };
-onSearch();
+roomSearch();
 
 const figure = ref<MetadataResponse[] | null>(null);
 //物件の画像を取得
 //const figure = ref<Promise<object>>();
-const onSearch2 = async () => {
+const roomFigureSearch = async () => {
   figure.value = await ImageQueryAPI.getMetadataRentRentPropertyKeyGet({
     propertyKey: id,
   });
   console.log(figure.value);
 };
-onSearch2();
+roomFigureSearch();
+
+const { user } = useUser();
+const { profile, fetchProfile } = useProfile();
+const router = useRouter();
+
+const loading = ref(false);
+
+const viewer = computed(() => {
+  if (!profile.value) return;
+  return {
+    userName: profile.value.name,
+    imageUrl: profile.value.imageUrl,
+    id: profile.value.email,
+  };
+});
+
+const landlord = computed(() => {
+  return {
+    // dejimaAPIから取得した物件名を入れてください。
+    buildingName:
+      (build.value?.buildingName || '') +
+      (room.value?.dwellingUnit?.roomNumberText || '') +
+      '/' +
+      agent.value?.agentShopName,
+    imageUrl:
+      'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+    id: 'hoge@example.com',
+  };
+});
+const postRoom = async (room: RequestRoom) => {
+  loading.value = true;
+  await addDoc(collection(db, 'rooms'), room);
+};
+
+const onClickApply = async () => {
+  const email = user.value?.email;
+  if (!email) {
+    router.push({ path: '/login' });
+  }
+
+  //チャットルームを作成するためにプロフィールを取得する
+  await fetchProfile();
+
+  if (!viewer.value || !landlord.value) return;
+
+  //テンプレートテキストを生成
+  const messages: Message[] = [
+    {
+      createAt: Timestamp.now(),
+      postUser: viewer.value.id,
+      text: '内見したいです!',
+      isRead: false,
+    },
+  ];
+  const room: RequestRoom = {
+    viewer: viewer.value,
+    landlord: landlord.value,
+    updateAt: Timestamp.now().toDate(),
+    messages: messages,
+  };
+  postRoom(room)
+    .then(() => {
+      router.push({ path: '/chat' });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 </script>
 <style>
 .sales {
