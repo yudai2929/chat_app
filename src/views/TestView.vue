@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { useFetchProfile } from '@/composables/useFetchProfile';
+import { useProfile } from '@/composables/useProfile';
 import { useUser } from '@/composables/useUser';
 import { db } from '@/plugins/firebase';
-import { Room } from '@/types/Room';
+import { Message } from '@/types/Message';
+import { RequestRoom } from '@/types/req/RequestRoom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const { user } = useUser();
-const { profile, fetchProfile } = useFetchProfile();
+const { profile, fetchProfile } = useProfile();
 const router = useRouter();
 
 const loading = ref(false);
@@ -31,7 +32,7 @@ const landlord = computed(() => {
     id: 'hoge@example.com',
   };
 });
-const postRoom = async (room: Room) => {
+const postRoom = async (room: RequestRoom) => {
   loading.value = true;
   await addDoc(collection(db, 'rooms'), room);
 };
@@ -46,10 +47,21 @@ const onClickApply = async () => {
   await fetchProfile();
 
   if (!viewer.value || !landlord.value) return;
-  const room: Room = {
+
+  //テンプレートテキストを生成
+  const messages: Message[] = [
+    {
+      createAt: Timestamp.now(),
+      postUser: viewer.value.id,
+      text: '内見したいです!',
+      isRead: false,
+    },
+  ];
+  const room: RequestRoom = {
     viewer: viewer.value,
     landlord: landlord.value,
     updateAt: Timestamp.now().toDate(),
+    messages: messages,
   };
   postRoom(room)
     .then(() => {

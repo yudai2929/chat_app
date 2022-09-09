@@ -23,7 +23,7 @@ const fetchProfile = async () => {
   }
 };
 
-export const useFetchProfile = () => {
+export const useProfile = () => {
   return {
     profile,
     exists,

@@ -1,7 +1,8 @@
-import { Message } from './Message ';
+import { Message } from './Message';
 
 export type Room = {
-  message?: Message;
+  id: string;
+  messages: Message[];
   updateAt: Date;
   viewer: Viewer;
   landlord: Landlord;

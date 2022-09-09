@@ -1,5 +1,7 @@
+import { Timestamp } from '@firebase/firestore';
+
 export type Message = {
-  createAt: string;
+  createAt: Timestamp;
   isRead: boolean;
   postUser: string;
   text: string;
