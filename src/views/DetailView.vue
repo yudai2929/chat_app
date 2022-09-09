@@ -1,5 +1,7 @@
 <template>
-  <el-button>検索結果へ戻る</el-button>
+  <router-link to="/">
+    <el-button>検索画面へ戻る</el-button>
+  </router-link>
   <!--タイトル-->
   <div class="title">
     {{ build?.buildingName }} {{ room?.dwellingUnit?.roomNumberText }}
