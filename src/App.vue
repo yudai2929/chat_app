@@ -1,7 +1,7 @@
 <template>
   <div>
-    <defaultHeader />
-    <main style="padding-top: 60px; min-height: 100vh">
+    <DefaultHeader />
+    <main style="padding-top: 57px; min-height: calc(100vh - 57px)">
       <RouterView />
     </main>
   </div>

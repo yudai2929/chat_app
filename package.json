@@ -10,6 +10,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.9",
+    "date-fns": "^2.29.2",
     "element-plus": "^2.2.5",
     "firebase": "^9.8.3",
     "vue": "^3.2.25",

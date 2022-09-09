@@ -47,7 +47,10 @@ const loginWithGoogle = async () => {
 </script>
 
 <template>
-  <el-row justify="center" style="margin-top: 20vh">
+  <el-row
+    justify="center"
+    style="padding-top: 20vh; min-height: calc(100vh - 57px)"
+  >
     <el-card shadow="never" style="width: 400px; height: 400px">
       <div>
         <h1 style="font-size: large; text-align: center">ログイン</h1>
