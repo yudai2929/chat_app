@@ -91,5 +91,5 @@ router.push({
 });
 
 app.use(router);
-app.use(OpenLayersMap);
+//app.use(OpenLayersMap);
 app.mount('#app');

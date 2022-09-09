@@ -93,24 +93,6 @@
       </div>
     </div>
   </div>
-
-  <!--{{ build }}-->
-  <!--地図(非同期処理だと値を更新しても反映されない)-->
-  <!--
-  <div style="height: 400px; width: 100%">
-    <l-map
-      ref="map"
-      :center="center"
-      :zoom="15"
-      @ready="init"
-      @update:bounds="showBounds"
-    >
-      <l-tile-layer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      ></l-tile-layer>
-      <l-control-layers />
-    </l-map>
-  </div>-->
 </template>
 
 <script lang="ts">
@@ -188,6 +170,7 @@ const projection = ref('EPSG:4326');
 const zoom = ref(15);
 const rotation = ref(0);
 
+/*
 const getCenter = (build: Building) => {
   const jp_lat: number = (build.latitude || 0) / 3600000;
   const jp_lon: number = (build.longitude || 0) / 3600000;
@@ -196,7 +179,7 @@ const getCenter = (build: Building) => {
   center.push(lat);
   center.push(lon);
   center.splice(0, 2);
-};
+};*/
 const onSearch = async () => {
   room.value = await rentPropertyQueryAPI.getRentProperty({
     propertyFullKey: id,
@@ -204,7 +187,7 @@ const onSearch = async () => {
   build.value = await buildingQueryAPI.getBuilding({
     buildingGuid: room.value?.buildingGuid || '',
   });
-  await getCenter(build.value);
+  //await getCenter(build.value);
 };
 onSearch();
 
