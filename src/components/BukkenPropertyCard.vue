@@ -18,12 +18,14 @@ const publishedAt = computed(() => {
     <template #header>
       <div class="card-header">
         <span>{{
-          `${buildingPropertyPreview.buildingName} ${buildingPropertyPreview.property[0].roomNumberText}号室`
+          `${buildingPropertyPreview.buildingName} ${buildingPropertyPreview.property[0].roomNumberText}号室：`
         }}</span>
+        <router-link :to="{ name: 'detail' }">詳細情報</router-link>
       </div>
     </template>
     <div>
       <p>住所：{{ buildingPropertyPreview.addressText }}</p>
+      <p>構造：{{ buildingPropertyPreview.structure }}</p>
       <p>ポイント：{{ buildingPropertyPreview.property[0].salesPoint }}</p>
       <small class="published">{{ publishedAt }}公開</small>
     </div>
