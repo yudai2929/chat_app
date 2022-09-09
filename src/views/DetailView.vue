@@ -54,12 +54,7 @@
       </div>
 
       <!--部屋の詳細-->
-      <el-descriptions
-        title="詳細情報"
-        direction="vertical"
-        :column="3"
-        border
-      >
+      <el-descriptions title="詳細情報" direction="vertical" :column="3" border>
         <el-descriptions-item label="構造">
           {{ build?.structure }}
         </el-descriptions-item>
@@ -95,6 +90,7 @@
   </div>
 </template>
 
+<!--
 <script lang="ts">
 import { LMap, LTileLayer, LControlLayers } from '@vue-leaflet/vue-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -132,6 +128,7 @@ export default {
   },
 };
 </script>
+-->
 
 <!--物件情報の取得-->
 <script setup lang="ts">
