@@ -20,7 +20,10 @@ const publishedAt = computed(() => {
         <span>{{
           `${buildingPropertyPreview.buildingName} ${buildingPropertyPreview.property[0].roomNumberText}号室：`
         }}</span>
-        <router-link :to="{ name: 'detail' }">詳細情報</router-link>
+        <router-link
+          :to="`/detail/${buildingPropertyPreview.property[0].propertyFullKey}`"
+          >詳細情報</router-link
+        >
       </div>
     </template>
     <div>
