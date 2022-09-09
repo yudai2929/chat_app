@@ -88,8 +88,8 @@ router.beforeEach((to, from, next) => {
 router.push({
   name: 'detail',
   params: { id: '1234' },
-})
-
+});
 
 app.use(router);
+//app.use(OpenLayersMap);
 app.mount('#app');
