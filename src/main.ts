@@ -49,6 +49,12 @@ const routes: RouteRecordRaw[] = [
     name: 'test',
   },
   {
+    path: '/detail/:id',
+    component: () => import('@/views/DetailView.vue'),
+    name: 'detail',
+    meta: { isPublic: true },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: { name: 'home' },
     meta: { isPublic: true },
@@ -78,6 +84,12 @@ router.beforeEach((to, from, next) => {
     }
   });
 });
+
+router.push({
+  name: 'detail',
+  params: { id: '1234' },
+})
+
 
 app.use(router);
 app.mount('#app');
