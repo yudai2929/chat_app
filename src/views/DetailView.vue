@@ -55,20 +55,21 @@
 
       <!--部屋の詳細-->
       <el-descriptions
-        title="部屋の詳細情報"
+        title="詳細情報"
         direction="vertical"
-        :column="4"
+        :column="3"
         border
       >
-        <el-descriptions-item label="現状" :span="2">{{
-          room?.currentStatus
-        }}</el-descriptions-item>
+        <el-descriptions-item label="構造">
+          {{ build?.structure }}
+        </el-descriptions-item>
         <el-descriptions-item label="楽器演奏">{{
           room?.contractCondition.musicalInstrumentRestriction
         }}</el-descriptions-item>
         <el-descriptions-item label="ガス">
           {{ room?.gas }}</el-descriptions-item
         >
+
         <el-descriptions-item label="最寄駅">
           {{ room?.transportation[0].station?.lineName }}
           {{ room?.transportation[0].station?.stationName }}駅
@@ -76,6 +77,13 @@
           {{ room?.transportation[0].stationAccess?.value }}
           {{ room?.transportation[0].stationAccess?.unit }}
         </el-descriptions-item>
+        <el-descriptions-item label="住所"
+          >{{ build?.addressText
+          }}{{ build?.branchNumberText }}</el-descriptions-item
+        >
+        <el-descriptions-item label="現状">{{
+          room?.currentStatus
+        }}</el-descriptions-item>
       </el-descriptions>
       その他
       <div class="other">
