@@ -1,4 +1,4 @@
-# Intern 2022 Summer Boilerplate
+# Intern 2022 
 
 ## Project setup
 
