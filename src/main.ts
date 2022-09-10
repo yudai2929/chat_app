@@ -22,12 +22,6 @@ const routes: RouteRecordRaw[] = [
     meta: { isPublic: true },
   },
   {
-    path: '/about',
-    component: () => import('@/views/AboutView.vue'),
-    name: 'about',
-    meta: { isPublic: true },
-  },
-  {
     path: '/login',
     component: () => import('@/views/LoginView.vue'),
     name: 'login',
@@ -47,12 +41,6 @@ const routes: RouteRecordRaw[] = [
     path: '/test',
     component: () => import('@/views/TestView.vue'),
     name: 'test',
-  },
-  {
-    path: '/detail/:id',
-    component: () => import('@/views/DetailView.vue'),
-    name: 'detail',
-    meta: { isPublic: true },
   },
   {
     path: '/:pathMatch(.*)*',

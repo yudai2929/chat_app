@@ -47,9 +47,6 @@ const signOutWithGoogle = () => {
             <el-menu-item index="/chat" style="font-weight: bold"
               >チャット</el-menu-item
             >
-            <el-menu-item index="about" style="font-weight: bold"
-              >絞り込み</el-menu-item
-            >
           </el-row>
           <el-row justify="center" align="middle" style="margin-left: 24px">
             <el-button
