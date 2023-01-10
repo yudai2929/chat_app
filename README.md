@@ -1,4 +1,4 @@
-# Intern 2022 
+# チャットアプリ Vue3の練習
 
 ## Project setup
 
